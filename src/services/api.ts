@@ -1,6 +1,8 @@
 import axios, { AxiosError } from "axios";
 import { parseCookies, setCookie } from "nookies";
 
+import { signOut } from "../contexts/AuthContexts";
+
 export const api = axios.create({
   baseURL: "http://localhost:3333",
   headers: {
@@ -65,8 +67,10 @@ api.interceptors.response.use(
           });
         });
       } else {
-        //deslogar usuario
+        signOut();
       }
     }
+
+    return Promise.reject(error);
   }
 );
