@@ -1,20 +1,12 @@
 import { useEffect } from "react";
+import { CanRender } from "../components/CanRender";
 import { useAuth } from "../contexts/AuthContexts";
-import { useCan } from "../hooks/useCan";
 import { setupAPIClient } from "../services/api";
 import { api } from "../services/apiClient";
 import { withSSRAuth } from "../utils/withSSRAuth";
 
 export default function Dashboard() {
   const { user } = useAuth();
-
-  const userCanSeePosts = useCan({
-    roles: ["editor"],
-  });
-
-  const userCanSeeMetrics = useCan({
-    roles: ["administrator"],
-  });
 
   useEffect(() => {
     api
@@ -26,8 +18,14 @@ export default function Dashboard() {
   return (
     <>
       <h1>Dashboard: {user?.email ?? ""}</h1>
-      {userCanSeeMetrics && <h2>Metrics</h2>}
-      {userCanSeePosts && <h2>Posts</h2>}
+
+      <CanRender roles={["administrator"]}>
+        <h2>Metrics</h2>
+      </CanRender>
+
+      <CanRender roles={["editor"]}>
+        <h2>Posts</h2>
+      </CanRender>
     </>
   );
 }
