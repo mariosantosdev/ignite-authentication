@@ -1,7 +1,7 @@
+import Link from "next/link";
 import { useEffect } from "react";
 import { CanRender } from "../components/CanRender";
 import { useAuth } from "../contexts/AuthContexts";
-import { setupAPIClient } from "../services/api";
 import { api } from "../services/apiClient";
 import { withSSRAuth } from "../utils/withSSRAuth";
 
@@ -23,6 +23,17 @@ export default function Dashboard() {
         <h2>Metrics</h2>
       </CanRender>
 
+      <p>
+        <Link href="/metrics">
+          <a>Access Metrics Page</a>
+        </Link>
+        <span>
+          {" "}
+          - The metrics page maybe will redirect you again to dashboard page, if
+          you don't have right permissions!
+        </span>
+      </p>
+
       <CanRender roles={["editor"]}>
         <h2>Posts</h2>
       </CanRender>
@@ -30,11 +41,4 @@ export default function Dashboard() {
   );
 }
 
-export const getServerSideProps = withSSRAuth(async (ctx) => {
-  const apiClient = setupAPIClient(ctx);
-  const res = await apiClient.get("/me");
-
-  console.log(res.data);
-
-  return { props: {} };
-});
+export const getServerSideProps = withSSRAuth(async (ctx) => ({ props: {} }));
