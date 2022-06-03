@@ -6,7 +6,7 @@ import { api } from "../services/apiClient";
 import { withSSRAuth } from "../utils/withSSRAuth";
 
 export default function Dashboard() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     api
@@ -33,6 +33,8 @@ export default function Dashboard() {
           you don't have right permissions!
         </span>
       </p>
+
+      <button onClick={signOut}>Sign Out</button>
 
       <CanRender roles={["editor"]}>
         <h2>Posts</h2>
