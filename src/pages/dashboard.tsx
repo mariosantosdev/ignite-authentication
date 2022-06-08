@@ -6,7 +6,7 @@ import { api } from "../services/apiClient";
 import { withSSRAuth } from "../utils/withSSRAuth";
 
 export default function Dashboard() {
-  const { user, signOut } = useAuth();
+  const { user, signOut, broadcastAuth } = useAuth();
 
   useEffect(() => {
     api
@@ -14,6 +14,11 @@ export default function Dashboard() {
       .then(({ data }) => console.log(data))
       .catch(console.error);
   });
+
+  function handleSignOut() {
+    broadcastAuth.current.postMessage("signOut");
+    signOut();
+  }
 
   return (
     <>
@@ -34,7 +39,7 @@ export default function Dashboard() {
         </span>
       </p>
 
-      <button onClick={signOut}>Sign Out</button>
+      <button onClick={handleSignOut}>Sign Out</button>
 
       <CanRender roles={["editor"]}>
         <h2>Posts</h2>
